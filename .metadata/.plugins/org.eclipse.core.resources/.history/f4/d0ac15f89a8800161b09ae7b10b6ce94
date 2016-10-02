@@ -1,4 +1,4 @@
-package chess;
+package src.chess;
 
 import java.io.EOFException;
 import java.io.File;
@@ -145,28 +145,7 @@ public class Player implements Serializable{
 			}
 			else
 			{
-				input = new ObjectInputStream(new FileInputStream(inputfile));
-				output = new ObjectOutputStream(new FileOutputStream(outputfile));
-				playerdonotexist=true;
-				try
-				{
-				while(true)
-				{
-					temp_player = (Player)input.readObject();
-					if (temp_player.name().equals(name()))
-					{
-						output.writeObject(this);
-						playerdonotexist = false;
-					}
-					else
-						output.writeObject(temp_player);
-				}
-				}
-				catch(EOFException e){
-					input.close();
-				}
-				if(playerdonotexist)
-					output.writeObject(this);
+				output = write_player_data_in_existing_player(inputfile, outputfile);
 			}
 			inputfile.delete();
 			output.close();
@@ -192,5 +171,36 @@ public class Player implements Serializable{
 		{
 			
 		}
+	}
+
+	public ObjectOutputStream write_player_data_in_existing_player(File inputfile, File outputfile)
+			throws IOException, FileNotFoundException, ClassNotFoundException {
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		Player temp_player;
+		boolean playerdonotexist;
+		input = new ObjectInputStream(new FileInputStream(inputfile));
+		output = new ObjectOutputStream(new FileOutputStream(outputfile));
+		playerdonotexist=true;
+		try
+		{
+		while(true)
+		{
+			temp_player = (Player)input.readObject();
+			if (temp_player.name().equals(name()))
+			{
+				output.writeObject(this);
+				playerdonotexist = false;
+			}
+			else
+				output.writeObject(temp_player);
+		}
+		}
+		catch(EOFException e){
+			input.close();
+		}
+		if(playerdonotexist)
+			output.writeObject(this);
+		return output;
 	}
 }
