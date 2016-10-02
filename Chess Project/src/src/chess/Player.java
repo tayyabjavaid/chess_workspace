@@ -177,8 +177,10 @@ public class Player implements Serializable{
 			inputfile.delete();
 			output.close();
 			File newf = new File(System.getProperty("user.dir")+ File.separator + "chessgamedata.dat");
-			if(outputfile.renameTo(newf)==false)
+			if(!outputfile.renameTo(newf))
+			{
 				System.out.println("File Renameing Unsuccessful");
+			}
 		}
 		catch (FileNotFoundException e)
 		{
