@@ -124,21 +124,23 @@ public class Player implements Serializable{
 		Player temp_player;
 		File inputfile=null;
 		File outputfile=null;
+		String input_file_name = System.getProperty("user.dir")+ File.separator + "chessgamedata.dat";
+		String output_file_name = System.getProperty("user.dir")+ File.separator + "tempfile.dat";
+		boolean playerdonotexist;
 		try
 		{
-			inputfile = new File(System.getProperty("user.dir")+ File.separator + "chessgamedata.dat");
-			outputfile = new File(System.getProperty("user.dir")+ File.separator + "tempfile.dat");
+			inputfile = new File(input_file_name);
+			outputfile = new File(output_file_name);
 		} catch (SecurityException e)
 		{
 			JOptionPane.showMessageDialog(null, "Read-Write Permission Denied !! Program Cannot Start");
 			System.exit(0);
 		} 
-		boolean playerdonotexist;
 		try
 		{
-			if(outputfile.exists()==false)
+			if(!outputfile.exists())
 				outputfile.createNewFile();
-			if(inputfile.exists()==false)
+			if(!inputfile.exists())
 			{
 					output = new ObjectOutputStream(new java.io.FileOutputStream(outputfile,true));
 					output.writeObject(this);
@@ -147,26 +149,30 @@ public class Player implements Serializable{
 			{
 				input = new ObjectInputStream(new FileInputStream(inputfile));
 				output = new ObjectOutputStream(new FileOutputStream(outputfile));
-				playerdonotexist=true;
+				playerdonotexist = true;
 				try
 				{
-				while(true)
-				{
-					temp_player = (Player)input.readObject();
-					if (temp_player.name().equals(name()))
+					while(true)
 					{
-						output.writeObject(this);
-						playerdonotexist = false;
+						temp_player = (Player)input.readObject();
+						if (temp_player.name().equals(name()))
+						{
+							output.writeObject(this);
+							playerdonotexist = false;
+						}
+						else
+						{
+							output.writeObject(temp_player);
+						}
 					}
-					else
-						output.writeObject(temp_player);
-				}
 				}
 				catch(EOFException e){
 					input.close();
 				}
 				if(playerdonotexist)
+				{
 					output.writeObject(this);
+				}
 			}
 			inputfile.delete();
 			output.close();
