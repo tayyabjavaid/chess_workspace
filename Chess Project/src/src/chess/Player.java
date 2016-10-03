@@ -28,7 +28,7 @@ public class Player implements Serializable{
 	private Integer gameswon;
 	
 	//Constructor
-	public Player(String name)
+	private Player(String name)
 	{
 		this.name = name.trim();
 		//this.lname = lname.trim();
@@ -117,6 +117,10 @@ public class Player implements Serializable{
 		return players;
 	}
 	
+	public static Player createPlayer(String name) {
+		return new Player(name);
+	}
+
 	public void Update_Player()            //Function to update the statistics of a player
 	{
 		ObjectInputStream input = null;

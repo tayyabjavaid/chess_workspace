@@ -772,7 +772,7 @@ public class Main extends JFrame implements MouseListener
 					}
 			
 						if(n.length()!=0)
-						{Player tem=new Player(n);
+						{Player tem=Player.createPlayer(n);
 						tem.Update_Player();
 						if(color==0)
 							White=tem;
