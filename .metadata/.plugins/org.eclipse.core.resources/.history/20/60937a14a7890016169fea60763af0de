@@ -203,7 +203,7 @@ public class Player implements Serializable{
 				output.writeObject(this);
 			}
 		}
-		inputfile.delete();
+		inputfile.delete();v
 		output.close();
 		File newf = new File(System.getProperty("user.dir")+ File.separator + "chessgamedata.dat");
 		if(!outputfile.renameTo(newf))
