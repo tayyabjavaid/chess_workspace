@@ -123,14 +123,11 @@ public class Player implements Serializable{
 
 	public void Update_Player()            //Function to update the statistics of a player
 	{
-		ObjectInputStream input = null;
-		ObjectOutputStream output = null;
-		Player temp_player;
+
 		File inputfile=null;
 		File outputfile=null;
 		String input_file_name = System.getProperty("user.dir")+ File.separator + "chessgamedata.dat";
 		String output_file_name = System.getProperty("user.dir")+ File.separator + "tempfile.dat";
-		boolean playerdonotexist;
 		try
 		{
 			inputfile = new File(input_file_name);
@@ -142,49 +139,7 @@ public class Player implements Serializable{
 		} 
 		try
 		{
-			if(!outputfile.exists())
-				outputfile.createNewFile();
-			if(!inputfile.exists())
-			{
-					output = new ObjectOutputStream(new java.io.FileOutputStream(outputfile,true));
-					output.writeObject(this);
-			}
-			else
-			{
-				input = new ObjectInputStream(new FileInputStream(inputfile));
-				output = new ObjectOutputStream(new FileOutputStream(outputfile));
-				playerdonotexist = true;
-				try
-				{
-					while(true)
-					{
-						temp_player = (Player)input.readObject();
-						if (temp_player.name().equals(name()))
-						{
-							output.writeObject(this);
-							playerdonotexist = false;
-						}
-						else
-						{
-							output.writeObject(temp_player);
-						}
-					}
-				}
-				catch(EOFException e){
-					input.close();
-				}
-				if(playerdonotexist)
-				{
-					output.writeObject(this);
-				}
-			}
-			inputfile.delete();
-			output.close();
-			File newf = new File(System.getProperty("user.dir")+ File.separator + "chessgamedata.dat");
-			if(!outputfile.renameTo(newf))
-			{
-				System.out.println("File Renameing Unsuccessful");
-			}
+			file_the_player_data(inputfile, outputfile);
 		}
 		catch (FileNotFoundException e)
 		{
@@ -203,6 +158,57 @@ public class Player implements Serializable{
 		catch (Exception e)
 		{
 			
+		}
+	}
+
+	public void file_the_player_data(File inputfile, File outputfile)
+			throws IOException, FileNotFoundException, ClassNotFoundException {
+		ObjectInputStream input;
+		ObjectOutputStream output;
+		Player temp_player;
+		boolean playerexists;
+		if(!outputfile.exists())
+			outputfile.createNewFile();
+		if(!inputfile.exists())
+		{
+				output = new ObjectOutputStream(new java.io.FileOutputStream(outputfile,true));
+				output.writeObject(this);
+		}
+		else
+		{
+			input = new ObjectInputStream(new FileInputStream(inputfile));
+			output = new ObjectOutputStream(new FileOutputStream(outputfile));
+			playerexists = false;
+			try
+			{
+				while(true)
+				{
+					temp_player = (Player)input.readObject();
+					if (temp_player.name().equals(name()))
+					{
+						output.writeObject(this);
+						playerexists = true;
+					}
+					else
+					{
+						output.writeObject(temp_player);
+					}
+				}
+			}
+			catch(EOFException e){
+				input.close();
+			}
+			if(!playerexists)
+			{
+				output.writeObject(this);
+			}
+		}
+		inputfile.delete();
+		output.close();
+		File newf = new File(System.getProperty("user.dir")+ File.separator + "chessgamedata.dat");
+		if(!outputfile.renameTo(newf))
+		{
+			System.out.println("File Renameing Unsuccessful");
 		}
 	}
 }
