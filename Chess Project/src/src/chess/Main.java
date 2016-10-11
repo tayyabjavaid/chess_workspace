@@ -44,7 +44,7 @@ public class Main extends JFrame implements MouseListener
 	private int chance=0;
 	private Cell boardState[][];
 	private ArrayList<Cell> destinationlist = new ArrayList<Cell>();
-	private Player White=null,Black=null;
+	private Player White=Player.createPlayer("null"),Black=Player.createPlayer("null");
 	private JPanel board=new JPanel(new GridLayout(8,8));
 	private JPanel wdetails=new JPanel(new GridLayout(3,3));
 	private JPanel bdetails=new JPanel(new GridLayout(3,3));
@@ -638,7 +638,7 @@ public class Main extends JFrame implements MouseListener
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 		if(White==null||Black==null)
 			{JOptionPane.showMessageDialog(controlPanel, "Fill in the details");
 			return;}
